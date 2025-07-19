@@ -360,7 +360,7 @@ def item():
     item_id = request.form['item_id']
     try:
       def tx():
-        db.session.execute(ignore_table.delete(ignore_table.c.item_id == item_id))
+        db.session.execute(ignore_table.delete().where(ignore_table.c.item_id == item_id))
         Item.query.filter_by(id=item_id).delete()
         db.session.commit()
       with_retries(tx)
@@ -387,7 +387,7 @@ def item():
     for item_id in item_ids:
       try:
         def tx():
-          db.session.execute(ignore_table.delete(ignore_table.c.item_id == item_id))
+          db.session.execute(ignore_table.delete().where(ignore_table.c.item_id == item_id))
           Item.query.filter_by(id=item_id).delete()
           db.session.commit()
         with_retries(tx)
@@ -683,7 +683,7 @@ def annotator():
     annotator_id = request.form['annotator_id']
     try:
       def tx():
-        db.session.execute(ignore_table.delete(ignore_table.c.annotator_id == annotator_id))
+        db.session.execute(ignore_table.delete().where(ignore_table.c.annotator_id == annotator_id))
         Annotator.query.filter_by(id=annotator_id).delete()
         db.session.commit()
       with_retries(tx)
@@ -710,7 +710,7 @@ def annotator():
     for annotator_id in annotator_ids:
       try:
         def tx():
-          db.session.execute(ignore_table.delete(ignore_table.c.annotator_id == annotator_id))
+          db.session.execute(ignore_table.delete().where(ignore_table.c.annotator_id == annotator_id))
           Annotator.query.filter_by(id=annotator_id).delete()
           db.session.commit()
         with_retries(tx)
