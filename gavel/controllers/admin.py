@@ -361,6 +361,7 @@ def item():
     try:
       def tx():
         db.session.execute(ignore_table.delete().where(ignore_table.c.item_id == item_id))
+        db.session.execute(view_table.delete().where(view_table.c.item_id == item_id))
         db.session.query(Annotator).filter(Annotator.next_id == item_id).update({Annotator.next_id: None})
         db.session.query(Annotator).filter(Annotator.prev_id == item_id).update({Annotator.prev_id: None})
         Item.query.filter_by(id=item_id).delete()
@@ -392,6 +393,7 @@ def item():
       try:
         def tx():
           db.session.execute(ignore_table.delete().where(ignore_table.c.item_id == item_id))
+          db.session.execute(view_table.delete().where(view_table.c.item_id == item_id))
           db.session.query(Annotator).filter(Annotator.next_id == item_id).update({Annotator.next_id: None})
           db.session.query(Annotator).filter(Annotator.prev_id == item_id).update({Annotator.prev_id: None})
           Item.query.filter_by(id=item_id).delete()
@@ -692,6 +694,7 @@ def annotator():
       def tx():
         db.session.execute(ignore_table.delete().where(ignore_table.c.annotator_id == annotator_id))
         db.session.execute(view_table.delete().where(view_table.c.annotator_id == annotator_id))
+        db.session.query(Decision).filter(Decision.annotator_id == annotator_id).delete()
         Annotator.query.filter_by(id=annotator_id).delete()
         db.session.commit()
       with_retries(tx)
@@ -720,6 +723,7 @@ def annotator():
         def tx():
           db.session.execute(ignore_table.delete().where(ignore_table.c.annotator_id == annotator_id))
           db.session.execute(view_table.delete().where(view_table.c.annotator_id == annotator_id))
+          db.session.query(Decision).filter(Decision.annotator_id == annotator_id).delete()
           Annotator.query.filter_by(id=annotator_id).delete()
           db.session.commit()
         with_retries(tx)
