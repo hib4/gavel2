@@ -1,8 +1,9 @@
-from marshmallow_sqlalchemy import ModelSchema
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
 from gavel.models.setting import Setting
 
 
-class SettingSchema(ModelSchema):
+class SettingSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Setting
+        load_instance = True

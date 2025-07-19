@@ -1,5 +1,5 @@
 from gavel.models import db, ma
-from marshmallow_sqlalchemy import ModelSchema, TableSchema
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 import gavel.utils as utils
 import gavel.crowd_bt as crowd_bt
 from sqlalchemy.orm.exc import NoResultFound
