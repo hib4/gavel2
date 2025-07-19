@@ -361,6 +361,8 @@ def item():
     try:
       def tx():
         db.session.execute(ignore_table.delete().where(ignore_table.c.item_id == item_id))
+        db.session.query(Annotator).filter(Annotator.next_id == item_id).update({Annotator.next_id: None})
+        db.session.query(Annotator).filter(Annotator.prev_id == item_id).update({Annotator.prev_id: None})
         Item.query.filter_by(id=item_id).delete()
         db.session.commit()
       with_retries(tx)
@@ -380,6 +382,8 @@ def item():
         def tx():
           db.session.rollback()
         with_retries(tx)
+        error.append(item_id)
+        continue
   elif action == 'BatchDelete':
     db.Session.autocommit = True
     item_ids = request.form.getlist('ids')
@@ -388,6 +392,8 @@ def item():
       try:
         def tx():
           db.session.execute(ignore_table.delete().where(ignore_table.c.item_id == item_id))
+          db.session.query(Annotator).filter(Annotator.next_id == item_id).update({Annotator.next_id: None})
+          db.session.query(Annotator).filter(Annotator.prev_id == item_id).update({Annotator.prev_id: None})
           Item.query.filter_by(id=item_id).delete()
           db.session.commit()
         with_retries(tx)
@@ -396,6 +402,7 @@ def item():
         def tx():
           db.session.rollback()
         with_retries(tx)
+        error.append(item_id)
         continue
   return redirect(url_for('admin'))
 
