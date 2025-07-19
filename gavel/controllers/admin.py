@@ -684,6 +684,7 @@ def annotator():
     try:
       def tx():
         db.session.execute(ignore_table.delete().where(ignore_table.c.annotator_id == annotator_id))
+        db.session.execute(view_table.delete().where(view_table.c.annotator_id == annotator_id))
         Annotator.query.filter_by(id=annotator_id).delete()
         db.session.commit()
       with_retries(tx)
@@ -711,6 +712,7 @@ def annotator():
       try:
         def tx():
           db.session.execute(ignore_table.delete().where(ignore_table.c.annotator_id == annotator_id))
+          db.session.execute(view_table.delete().where(view_table.c.annotator_id == annotator_id))
           Annotator.query.filter_by(id=annotator_id).delete()
           db.session.commit()
         with_retries(tx)
