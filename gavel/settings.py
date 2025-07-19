@@ -62,6 +62,9 @@ c = Config(CONFIG_FILE)
 BASE_URL =            c.get('base_url',        'BASE_URL')
 ADMIN_PASSWORD =      c.get('admin_password',  'ADMIN_PASSWORD')
 DB_URI =              c.get('db_uri',          ['DATABASE_URL', 'DB_URI'], default='postgresql://localhost/gavel')
+# Patch for SQLAlchemy: convert postgres:// to postgresql://
+if DB_URI.startswith('postgres://'):
+    DB_URI = DB_URI.replace('postgres://', 'postgresql://', 1)
 BROKER_URI =          c.get('broker_uri',      ['REDIS_URL', 'BROKER_URI'], default='redis://localhost:6379/0')
 SECRET_KEY =          c.get('secret_key',      'SECRET_KEY')
 PORT =            int(c.get('port',            'PORT',                     default=5000))
